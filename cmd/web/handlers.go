@@ -21,26 +21,10 @@ func (app *application) home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	for _, snippet := range s {
-		fmt.Fprintf(w, "%v\n", snippet)
-	}
-
-	// Initialize a slice containing the paths to the two files. Note that the
-	// home.page.tmpl file must be the *first* file in the slice.
-	// files := []string{
-	// 	"./ui/html/home.page.tmpl",
-	// 	"./ui/html/base.layout.tmpl",
-	// 	"./ui/html/footer.partial.tmpl",
-	// }
-	// ts, err := template.ParseFiles(files...)
-	// if err != nil {
-	// 	app.serverError(w, err)
-	// 	return
-	// }
-	// err = ts.Execute(w, nil)
-	// if err != nil {
-	// 	app.serverError(w, err)
-	// }
+	// Use the new render helper.
+	app.render(w, r, "home.page.tmpl", &templateData{
+		Snippets: s,
+	})
 }
 
 func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
@@ -50,9 +34,6 @@ func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Use the SnippetModel object's Get method to retrieve the data for a
-	// specific record based on its ID. If no matching record is found,
-	// return a 404 Not Found response.
 	s, err := app.snippets.Get(id)
 	if err != nil {
 		if errors.Is(err, models.ErrNoRecord) {
@@ -63,8 +44,10 @@ func (app *application) showSnippet(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Write the snippet data as a plain-text HTTP response body.
-	fmt.Fprintf(w, "%v", *s)
+	// Use the new render helper.
+	app.render(w, r, "show.page.tmpl", &templateData{
+		Snippet: s,
+	})
 }
 
 func (app *application) createSnippet(w http.ResponseWriter, r *http.Request) {
