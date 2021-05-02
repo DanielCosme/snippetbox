@@ -35,6 +35,8 @@ func (app *application) routes() http.Handler {
 		r.Post("/user/login", app.loginUser)
 	})
 
+	r.Get("/ping", ping)
+
 	fileServer := http.FileServer(http.Dir("./ui/static/"))
 	r.Handle("/static/*", http.StripPrefix("/static", fileServer))
 
