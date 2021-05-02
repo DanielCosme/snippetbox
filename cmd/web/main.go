@@ -21,6 +21,7 @@ type application struct {
 	snippets      *mysql.SnippetModel
 	session       *sessions.Session
 	templateCache map[string]*template.Template
+	users         *mysql.UserModel
 }
 
 // The responsibilities of main() function are limited to:
@@ -75,6 +76,7 @@ func main() {
 		snippets:      &mysql.SnippetModel{DB: db},
 		session:       session,
 		templateCache: templateCache,
+		users:         &mysql.UserModel{DB: db},
 	}
 
 	tlsConfig := &tls.Config{
