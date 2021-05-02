@@ -15,6 +15,7 @@ func (app *application) routes() http.Handler {
 	r.Group(func(r chi.Router) {
 		r.Use(app.session.Enable)
 		r.Use(noSurf)
+		r.Use(app.authenticate)
 
 		r.Group(func(r chi.Router) {
 			r.Use(app.requireAuthentication)
